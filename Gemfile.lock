@@ -1,0 +1,56 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    base64 (0.3.0)
+    csv (3.3.5)
+    image_size (3.6.0)
+    logger (1.7.0)
+    nkf (0.2.0)
+    pastel (0.8.0)
+      tty-color (~> 0.5)
+    rake (13.4.2)
+    review (5.11.0)
+      base64
+      csv
+      image_size
+      logger
+      nkf
+      rexml
+      rouge
+      rubyzip
+      tty-logger
+    rexml (3.4.4)
+    rouge (5.0.0)
+      strscan (~> 3.1)
+    rubyzip (3.4.1)
+    strscan (3.1.6)
+    tty-color (0.6.0)
+    tty-logger (0.6.0)
+      pastel (~> 0.8)
+
+PLATFORMS
+  arm64-darwin-25
+  ruby
+
+DEPENDENCIES
+  rake
+  review (= 5.11.0)
+
+CHECKSUMS
+  base64 (0.3.0)
+  csv (3.3.5)
+  image_size (3.6.0)
+  logger (1.7.0)
+  nkf (0.2.0)
+  pastel (0.8.0)
+  rake (13.4.2)
+  review (5.11.0)
+  rexml (3.4.4)
+  rouge (5.0.0)
+  rubyzip (3.4.1)
+  strscan (3.1.6)
+  tty-color (0.6.0)
+  tty-logger (0.6.0)
+
+BUNDLED WITH
+  4.0.15
