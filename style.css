@@ -14,14 +14,14 @@ x:p:h1:h2:h3 = 12px:14px:16px:24px:30px
 
 @font-face {
   font-family: "Shippori Mincho";
-  src: url("fonts/shippori3/ShipporiMincho-OTF-Regular.otf") format("opentype");
+  src: url('fonts/shippori3/ShipporiMincho-OTF-Regular.otf') format("opentype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Shippori Mincho";
-  src: url("fonts/shippori3/ShipporiMincho-OTF-Bold.otf") format("opentype");
+  src: url('fonts/shippori3/ShipporiMincho-OTF-Bold.otf') format("opentype");
   font-weight: bold;
   font-style: normal;
 }

@@ -1,23 +1,23 @@
 PREDEF:
-  - contents/predef/00_緒言.md
+  - contents/predef/00_緒言.re
 
 CHAPS:
-  - contents/chaps/00_序説.md
-  - contents/chaps/01_幼少の頃.md
-  - contents/chaps/02_東京に出る.md
-  - contents/chaps/03_私の学生時代.md
-  - contents/chaps/04_鳩山と結婚す.md
-  - contents/chaps/05_結婚してから.md
-  # - contents/chaps/06_我れ母となる.md
-  # - contents/chaps/07_家庭と娯楽.md
-  # - contents/chaps/08_父の感化.md
-  # - contents/chaps/09_大隈侯の遭難.md
-  # - contents/chaps/10_美貌と精神修養.md
-  # - contents/chaps/11_鳩山は人材を愛した.md
-  # - contents/chaps/12_最初の選挙運動.md
-  # - contents/chaps/13_我が子の教育.md
-  # - contents/chaps/14_欧米漫遊の思出.md
-  # - contents/chaps/15_生は悲し.md
+  - contents/chaps/00_序説.re
+  - contents/chaps/01_幼少の頃.re
+  - contents/chaps/02_東京に出る.re
+  - contents/chaps/03_私の学生時代.re
+  - contents/chaps/04_鳩山と結婚す.re
+  - contents/chaps/05_結婚してから.re
+  - contents/chaps/06_我れ母となる.re
+  - contents/chaps/07_家庭と娯楽.re
+  - contents/chaps/08_父の感化.re
+  - contents/chaps/09_大隈侯の遭難.re
+  - contents/chaps/10_美貌と精神修養.re
+  - contents/chaps/11_鳩山は人材を愛した.re
+  - contents/chaps/12_最初の選挙運動.re
+  # - contents/chaps/13_我が子の教育.re
+  # - contents/chaps/14_欧米漫遊の思出.re
+  # - contents/chaps/15_生は悲し.re
   # - contents/chaps/16_略歴.md
 
 APPENDIX:
