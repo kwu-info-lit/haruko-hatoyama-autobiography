@@ -193,6 +193,7 @@ class Reader {
     }
     #onLoad({ detail: { doc } }) {
         doc.addEventListener('keydown', this.#handleKeydown.bind(this))
+        $('#loading-overlay')?.classList.add('hidden')
     }
     #onRelocate({ detail }) {
         const { fraction, location, tocItem, pageItem } = detail
@@ -209,10 +210,19 @@ class Reader {
 }
 
 const open = async file => {
-    document.body.removeChild($('#drop-target'))
+    $('#loading-overlay')?.classList.remove('hidden')
+    const dropTarget = $('#drop-target')
+    if (dropTarget) {
+        document.body.removeChild(dropTarget)
+    }
     const reader = new Reader()
     globalThis.reader = reader
-    await reader.open(file)
+    try {
+        await reader.open(file)
+    } catch (e) {
+        console.error(e)
+        $('#loading-overlay')?.classList.add('hidden')
+    }
 }
 
 const dragOverHandler = e => e.preventDefault()
