@@ -137,6 +137,34 @@ class Reader {
 
         document.addEventListener('keydown', this.#handleKeydown.bind(this))
 
+        // Tap/click navigation: left 1/3 = go left, right 1/3 = go right
+        const TAP_THRESHOLD = 10 // max movement (px) to still count as a tap
+        const setupTapNavigation = (target, getWidth) => {
+            let startX = 0, startY = 0
+            target.addEventListener('pointerdown', e => {
+                startX = e.clientX
+                startY = e.clientY
+            })
+            target.addEventListener('pointerup', e => {
+                const dx = Math.abs(e.clientX - startX)
+                const dy = Math.abs(e.clientY - startY)
+                if (dx > TAP_THRESHOLD || dy > TAP_THRESHOLD) return
+                // Ignore if user selected text
+                const sel = (target.defaultView || target).getSelection?.()
+                if (sel && sel.toString().length > 0) return
+                const width = getWidth()
+                const x = e.clientX
+                if (x < width / 3) this.view.goLeft()
+                else if (x > width * 2 / 3) this.view.goRight()
+            })
+        }
+        // Apply to the main view element
+        setupTapNavigation(this.view, () => this.view.clientWidth)
+        // Apply to each loaded iframe document
+        this.view.addEventListener('load', ({ detail: { doc } }) => {
+            setupTapNavigation(doc, () => doc.documentElement.clientWidth)
+        })
+
         const title = formatLanguageMap(book.metadata?.title) || 'Untitled Book'
         document.title = title
         $('#side-bar-title').innerText = title
