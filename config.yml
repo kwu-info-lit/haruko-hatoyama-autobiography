@@ -35,7 +35,7 @@ toclevel: 1
 secnolevel: 0
 toc: true
 
-coverimage: cover_1000x1500.png
+coverimage: images/cover-1000x1500.png
 titlepage: false
 
 direction: "rtl"
