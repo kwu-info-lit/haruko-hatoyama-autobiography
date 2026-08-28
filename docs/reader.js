@@ -149,6 +149,8 @@ class Reader {
                 const dx = Math.abs(e.clientX - startX)
                 const dy = Math.abs(e.clientY - startY)
                 if (dx > TAP_THRESHOLD || dy > TAP_THRESHOLD) return
+                // Ignore if the tap target is inside a link
+                if (e.target.closest?.('a')) return
                 // Ignore if user selected text
                 const sel = (target.defaultView || target).getSelection?.()
                 if (sel && sel.toString().length > 0) return
