@@ -42,6 +42,31 @@ config.yml           # Re:VIEW設定ファイル
 
 ---
 
+## 原本画像と各章の対応
+
+画像ファイル名は各章の開始ページです。次の章の開始直前までがその章の範囲になります。
+
+- **緒言** (`contents/predef/00_preface.re`): 画像: 004.jpg
+- **序説** (`contents/chaps/00_introduction.re`): 画像: 008.jpg
+- **一 幼少の頃** (`contents/chaps/01_childhood.re`): 画像: 022.jpg
+- **二 東京に出る** (`contents/chaps/02_moving_to_tokyo.re`): 画像: 036.jpg
+- **三 私の学生時代** (`contents/chaps/03_my_student_days.re`): 画像: 049.jpg
+- **四 鳩山と結婚す** (`contents/chaps/04_marrying_hatoyama.re`): 画像: 075.jpg
+- **五 結婚してから** (`contents/chaps/05_after_marriage.re`): 画像: 094.jpg
+- **六 我れ母となる** (`contents/chaps/06_becoming_a_mother.re`): 画像: 115.jpg
+- **七 家庭と娯楽** (`contents/chaps/07_family_and_leisure.re`): 画像: 146.jpg
+- **八 父の感化** (`contents/chaps/08_fathers_influence.re`): 画像: 155.jpg
+- **九 大隈侯の遭難** (`contents/chaps/09_marquis_okuma_incident.re`): 画像: 167.jpg
+- **一〇 美貌と精神修養** (`contents/chaps/10_beauty_and_spiritual_cultivation.re`): 画像: 176.jpg
+- **一一 鳩山は人材を愛した** (`contents/chaps/11_hatoyama_and_talented_people.re`): 画像: 189.jpg
+- **一二 最初の選挙運動** (`contents/chaps/12_first_election_campaign.re`): 画像: 198.jpg
+- **一三 我が子の教育** (`contents/chaps/13_education_of_my_children.re`): 画像: 209.jpg
+- **一四 欧米漫遊の思出** (`contents/chaps/14_memories_of_travels_abroad.re`): 画像: 233.jpg
+- **一五 生は悲し** (`contents/chaps/15_sorrow_of_life.re`): 画像: 249.jpg
+- **一六 略歴** (`contents/chaps/16_biography.re`): 画像: 259.jpg
+
+---
+
 ## Re:VIEWフォーマット規則
 
 `.re` ファイルは Re:VIEW 5.0 記法を使用します。主な記法：
@@ -109,33 +134,14 @@ config.yml           # Re:VIEW設定ファイル
 - 句点（`。`）または読点（`、`）の直後で改行する
 - 昭和初期の文体では文章が `、` で終わることがある。そのような `、` も改行対象とする
 - `@<ruby>{語, よみ}` などのインラインタグ**内部**の `、` では改行しない
-- `@<br>{}` タグは使用しない（改行で代替する）
 - 見出し行（`=` で始まる行）、コメント行（`#@#` で始まる行）、ブロック命令（`//` で始まる行）には適用しない
 
 ### 例
 
-改行前（悪い例）：
-```
-それぢや一つ相談して見やう、早速往かれました、丁度そこに竹橋女学校の校長をしてゐられた。
-```
-
-改行後（良い例）：
 ```
 それぢや一つ相談して見やう、
 早速往かれました、
 丁度そこに竹橋女学校の校長をしてゐられた。
-```
-
-### フォーマッタスクリプト
-
-`.re` ファイルへの改行挿入には、以下のスクリプトを使用する：
-
-```bash
-# 単一ファイル
-python3 ~/.gemini/antigravity/brain/423713db-d5ac-46b1-b0d8-f209a04b5e5f/scratch/reformat_re.py contents/chaps/01_childhood.re
-
-# contents/ 以下の全 .re ファイル
-python3 ~/.gemini/antigravity/brain/423713db-d5ac-46b1-b0d8-f209a04b5e5f/scratch/reformat_re.py contents/
 ```
 
 ---
