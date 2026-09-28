@@ -1,420 +1,158 @@
 <!DOCTYPE html>
+<html lang="ja">
+<head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self' blob:; script-src 'self'; style-src 'self' blob: 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' blob: data: *; frame-src blob: data:; object-src blob: data:; form-action 'none';">
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self' blob: data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="description" content="鳩山春子『自叙伝』（1929年）の電子版を、ブラウザで縦書きのまま読めるリーダーです。">
+<title>自叙伝 — 鳩山春子</title>
 <link rel="icon" type="image/png" href="favicon.png">
-<title>自叙伝</title>
-<style>
-    :root {
-        --active-bg: rgba(0, 0, 0, .05);
-    }
+<link rel="stylesheet" href="reader.css">
+<script src="reader.js" type="module"></script>
+</head>
+<body>
 
-    @supports (color-scheme: light dark) {
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --active-bg: rgba(255, 255, 255, .1);
-            }
-        }
-    }
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-toc" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></symbol>
+    <symbol id="i-type" viewBox="0 0 24 24"><path d="M3 19 8.5 5h1L15 19M5.2 14h7.6M15.5 19l3.2-8h.6l3.2 8M16.6 16.4h4.8"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+</svg>
 
-    html {
-        height: 100%;
-    }
-
-    body {
-        margin: 0 auto;
-        height: 100%;
-        font: menu;
-        font-family: system-ui, sans-serif;
-    }
-
-    #drop-target {
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        visibility: hidden;
-    }
-
-    #drop-target h1 {
-        font-weight: 900;
-    }
-
-    #file-button {
-        font: inherit;
-        background: none;
-        border: 0;
-        padding: 0;
-        text-decoration: underline;
-        cursor: pointer;
-    }
-
-    .icon {
-        display: block;
-        fill: none;
-        stroke: currentcolor;
-        stroke-width: 2px;
-    }
-
-    .empty-state-icon {
-        margin: auto;
-    }
-
-    .toolbar {
-        box-sizing: border-box;
-        position: absolute;
-        z-index: 1;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        height: 48px;
-        padding: 6px;
-        transition: opacity 250ms ease;
-        visibility: hidden;
-    }
-
-    .toolbar button {
-        padding: 3px;
-        border-radius: 6px;
-        background: none;
-        border: 0;
-        color: GrayText;
-    }
-
-    .toolbar button:hover {
-        background: rgba(0, 0, 0, .1);
-        color: currentcolor;
-    }
-
-    #header-bar {
-        top: 0;
-    }
-
-    #nav-bar {
-        bottom: 0;
-    }
-
-    #progress-slider {
-        flex-grow: 1;
-        margin: 0 12px;
-        visibility: hidden;
-    }
-
-    #side-bar {
-        visibility: hidden;
-        box-sizing: border-box;
-        position: absolute;
-        z-index: 2;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 320px;
-        transform: translateX(-320px);
-        display: flex;
-        flex-direction: column;
-        background: Canvas;
-        color: CanvasText;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, .2), 0 0 40px rgba(0, 0, 0, .2);
-        transition: visibility 0s linear 300ms, transform 300ms ease;
-    }
-
-    #side-bar.show {
-        visibility: visible;
-        transform: translateX(0);
-        transition-delay: 0s;
-    }
-
-    #dimming-overlay {
-        visibility: hidden;
-        position: fixed;
-        z-index: 2;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, .2);
-        opacity: 0;
-        transition: visibility 0s linear 300ms, opacity 300ms ease;
-    }
-
-    #dimming-overlay.show {
-        visibility: visible;
-        opacity: 1;
-        transition-delay: 0s;
-    }
-
-    #side-bar-header {
-        padding: 1rem;
-        display: flex;
-        border-bottom: 1px solid rgba(0, 0, 0, .1);
-        align-items: center;
-    }
-
-    #side-bar-cover {
-        height: 10vh;
-        min-height: 60px;
-        max-height: 180px;
-        border-radius: 3px;
-        border: 0;
-        background: lightgray;
-        box-shadow: 0 0 1px rgba(0, 0, 0, .1), 0 0 16px rgba(0, 0, 0, .1);
-        margin-inline-end: 1rem;
-    }
-
-    #side-bar-cover:not([src]) {
-        display: none;
-    }
-
-    #side-bar-title {
-        margin: .5rem 0;
-        font-size: inherit;
-    }
-
-    #side-bar-author {
-        margin: .5rem 0;
-        font-size: small;
-        color: GrayText;
-    }
-
-    #toc-view {
-        padding: .5rem;
-        overflow-y: scroll;
-    }
-
-    #toc-view li,
-    #toc-view ol {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    #toc-view a,
-    #toc-view span {
-        display: block;
-        border-radius: 6px;
-        padding: 8px;
-        margin: 2px 0;
-    }
-
-    #toc-view a {
-        color: CanvasText;
-        text-decoration: none;
-    }
-
-    #toc-view a:hover {
-        background: var(--active-bg);
-    }
-
-    #toc-view span {
-        color: GrayText;
-    }
-
-    #toc-view svg {
-        margin-inline-start: -24px;
-        padding-inline-start: 5px;
-        padding-inline-end: 6px;
-        fill: CanvasText;
-        cursor: default;
-        transition: transform .2s ease;
-        opacity: .5;
-    }
-
-    #toc-view svg:hover {
-        opacity: 1;
-    }
-
-    #toc-view [aria-current] {
-        font-weight: bold;
-        background: var(--active-bg);
-    }
-
-    #toc-view [aria-expanded="false"] svg {
-        transform: rotate(-90deg);
-    }
-
-    #toc-view [aria-expanded="false"]+[role="group"] {
-        display: none;
-    }
-
-    #menu-button {
-        display: none;
-    }
-
-    .menu-container {
-        position: relative;
-    }
-
-    .menu,
-    .menu ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .menu {
-        visibility: hidden;
-        position: absolute;
-        right: 0;
-        background: Canvas;
-        color: CanvasText;
-        border-radius: 6px;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, .2), 0 0 16px rgba(0, 0, 0, .1);
-        padding: 6px;
-        cursor: default;
-    }
-
-    .menu.show {
-        visibility: visible;
-    }
-
-    .menu li {
-        padding: 6px 12px;
-        padding-left: 24px;
-        border-radius: 6px;
-    }
-
-    .menu li:hover {
-        background: var(--active-bg);
-    }
-
-    .menu li[aria-checked="true"] {
-        background-position: center left;
-        background-repeat: no-repeat;
-        background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223%22%2F%3E%3C%2Fsvg%3E');
-    }
-
-    .popover {
-        background: Canvas;
-        color: CanvasText;
-        border-radius: 6px;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, .2), 0 0 16px rgba(0, 0, 0, .1), 0 0 32px rgba(0, 0, 0, .1);
-    }
-
-    .popover-arrow-down {
-        fill: Canvas;
-        filter: drop-shadow(0 -1px 0 rgba(0, 0, 0, .2));
-    }
-
-    .popover-arrow-up {
-        fill: Canvas;
-        filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .2));
-    }
-
-    #loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: Canvas;
-        color: CanvasText;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-    }
-
-    #loading-overlay.hidden {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-    }
-
-    .spinner-container {
-        position: relative;
-        width: 64px;
-        height: 64px;
-        margin-bottom: 1.5rem;
-    }
-
-    .spinner-ring {
-        box-sizing: border-box;
-        width: 100%;
-        height: 100%;
-        border: 4px solid var(--active-bg);
-        border-radius: 50%;
-    }
-
-    .spinner-value {
-        box-sizing: border-box;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: 4px solid transparent;
-        border-top-color: #802358;
-        border-radius: 50%;
-        animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-</style>
-<div id="loading-overlay">
-    <div class="spinner-container">
-        <div class="spinner-ring"></div>
-        <div class="spinner-value"></div>
+<div id="loader" role="status" aria-live="polite">
+    <div class="loader-mark">
+        <span class="loader-title">自叙伝</span>
+        <span class="loader-author">鳩山春子</span>
     </div>
+    <div class="loader-bar"><div id="loader-progress"></div></div>
+    <p id="loader-message">本を読み込んでいます…</p>
+    <button id="loader-retry" class="text-button" hidden>もう一度読み込む</button>
 </div>
-<input type="file" id="file-input" hidden>
-<div id="drop-target" class="filter">
-    <div>
-        <svg class="icon empty-state-icon" width="72" height="72" aria-hidden="true">
-            <path
-                d="M36 18s-6-6-12-6-15 6-15 6v42s9-6 15-6 12 6 12 6c4-4 8-6 12-6s12 2 15 6V18c-6-4-12-6-15-6-4 0-8 2-12 6m0 0v42" />
-        </svg>
-        <h1>Drop a book here!</h1>
-        <p>Or <button id="file-button">choose a file</button> to open it.</p>
+
+<main id="stage" aria-label="本文">
+    <div id="viewport"><div id="content" class="epub-body"></div></div>
+    <div id="running-head" aria-hidden="true"></div>
+    <div id="folio" aria-hidden="true"></div>
+    <button class="edge-nav edge-left" id="edge-left" tabindex="-1"><svg class="icon"><use href="#i-left"/></svg></button>
+    <button class="edge-nav edge-right" id="edge-right" tabindex="-1"><svg class="icon"><use href="#i-right"/></svg></button>
+</main>
+
+<header id="topbar" class="chrome">
+    <button id="toc-button" class="icon-button" aria-label="目次" title="目次 (T)" aria-controls="toc-panel">
+        <svg class="icon"><use href="#i-toc"/></svg>
+    </button>
+    <div class="topbar-title">
+        <span id="book-title"></span>
+        <span id="book-author"></span>
     </div>
-</div>
-<div id="dimming-overlay" aria-hidden="true"></div>
-<div id="side-bar">
-    <div id="side-bar-header">
-        <img id="side-bar-cover">
-        <div>
-            <h1 id="side-bar-title"></h1>
-            <p id="side-bar-author"></p>
+    <button id="search-button" class="icon-button" aria-label="本文検索" title="本文検索 (/)" aria-controls="search-panel">
+        <svg class="icon"><use href="#i-search"/></svg>
+    </button>
+    <button id="settings-button" class="icon-button" aria-label="表示設定" title="表示設定" aria-controls="settings-panel" aria-expanded="false">
+        <svg class="icon"><use href="#i-type"/></svg>
+    </button>
+</header>
+
+<footer id="bottombar" class="chrome">
+    <div class="bottombar-info">
+        <span id="chapter-label"></span>
+        <span id="progress-label"></span>
+    </div>
+    <div class="bottombar-slider">
+        <input id="slider" type="range" min="0" max="1000" step="1" value="0" aria-label="読書位置">
+        <output id="slider-preview" hidden></output>
+    </div>
+</footer>
+
+<div id="scrim" hidden></div>
+
+<aside id="toc-panel" class="panel panel-start" role="dialog" aria-modal="true" aria-labelledby="toc-heading" hidden>
+    <div class="panel-header">
+        <h2 id="toc-heading">目次</h2>
+        <button class="icon-button" data-close aria-label="閉じる"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="panel-body">
+        <div class="book-card">
+            <img id="cover-thumb" alt="">
+            <div>
+                <p class="book-card-title" id="card-title"></p>
+                <p class="book-card-author" id="card-author"></p>
+            </div>
+        </div>
+        <nav aria-label="章"><ol id="toc-list" class="toc-list"></ol></nav>
+        <details class="credits">
+            <summary>電子版制作</summary>
+            <ul id="credits"></ul>
+        </details>
+    </div>
+</aside>
+
+<aside id="search-panel" class="panel panel-end" role="dialog" aria-modal="true" aria-labelledby="search-heading" hidden>
+    <div class="panel-header">
+        <h2 id="search-heading">本文検索</h2>
+        <button class="icon-button" data-close aria-label="閉じる"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+    <form id="search-form" class="search-form" role="search">
+        <svg class="icon"><use href="#i-search"/></svg>
+        <input id="search-input" type="search" placeholder="語句を入力" autocomplete="off" enterkeyhint="search" aria-label="検索語">
+    </form>
+    <p id="search-status" class="search-status" aria-live="polite"></p>
+    <ol id="search-results" class="search-results"></ol>
+</aside>
+
+<div id="settings-panel" class="popover" role="dialog" aria-label="表示設定" hidden>
+    <div class="setting">
+        <span class="setting-label">文字サイズ</span>
+        <div class="stepper">
+            <button id="font-smaller" aria-label="文字を小さく">A<small>−</small></button>
+            <output id="font-size-value"></output>
+            <button id="font-larger" aria-label="文字を大きく">A<small>＋</small></button>
         </div>
     </div>
-    <div id="toc-view"></div>
-</div>
-<div id="header-bar" class="toolbar">
-    <button id="side-bar-button" aria-label="Show sidebar">
-        <svg class="icon" width="24" height="24" aria-hidden="true">
-            <path d="M 4 6 h 16 M 4 12 h 16 M 4 18 h 16" />
-        </svg>
-    </button>
-    <div id="menu-button" class="menu-container">
-        <button aria-label="Show settings" aria-haspopup="true">
-            <svg class="icon" width="24" height="24" aria-hidden="true">
-                <path
-                    d="M5 12.7a7 7 0 0 1 0-1.4l-1.8-2 2-3.5 2.7.5a7 7 0 0 1 1.2-.7L10 3h4l.9 2.6 1.2.7 2.7-.5 2 3.4-1.8 2a7 7 0 0 1 0 1.5l1.8 2-2 3.5-2.7-.5a7 7 0 0 1-1.2.7L14 21h-4l-.9-2.6a7 7 0 0 1-1.2-.7l-2.7.5-2-3.4 1.8-2Z" />
-                <circle cx="12" cy="12" r="3" />
-            </svg>
-        </button>
+    <div class="setting">
+        <span class="setting-label">行間</span>
+        <div class="segmented" data-setting="lineHeight">
+            <button data-value="tight">狭め</button>
+            <button data-value="normal">標準</button>
+            <button data-value="loose">広め</button>
+        </div>
+    </div>
+    <div class="setting">
+        <span class="setting-label">書体</span>
+        <div class="segmented" data-setting="font">
+            <button data-value="mincho" class="font-mincho">明朝</button>
+            <button data-value="gothic" class="font-gothic">ゴシック</button>
+        </div>
+    </div>
+    <div class="setting">
+        <span class="setting-label">組方向</span>
+        <div class="segmented" data-setting="writing">
+            <button data-value="vertical">縦書き</button>
+            <button data-value="horizontal">横書き</button>
+        </div>
+    </div>
+    <div class="setting">
+        <span class="setting-label">ふりがな</span>
+        <div class="segmented" data-setting="ruby">
+            <button data-value="on">表示</button>
+            <button data-value="off">隠す</button>
+        </div>
+    </div>
+    <div class="setting">
+        <span class="setting-label">背景</span>
+        <div class="segmented swatches" data-setting="theme">
+            <button data-value="auto"><span class="swatch swatch-auto"></span>自動</button>
+            <button data-value="light"><span class="swatch swatch-light"></span>白</button>
+            <button data-value="sepia"><span class="swatch swatch-sepia"></span>生成り</button>
+            <button data-value="dark"><span class="swatch swatch-dark"></span>夜</button>
+        </div>
     </div>
 </div>
-<div id="nav-bar" class="toolbar">
-    <button id="left-button" aria-label="Go left">
-        <svg class="icon" width="24" height="24" aria-hidden="true">
-            <path d="M 15 6 L 9 12 L 15 18" />
-        </svg>
-    </button>
-    <input id="progress-slider" type="range" min="0" max="1" step="any" list="tick-marks">
-    <datalist id="tick-marks"></datalist>
-    <button id="right-button" aria-label="Go right">
-        <svg class="icon" width="24" height="24" aria-hidden="true">
-            <path d="M 9 6 L 15 12 L 9 18" />
-        </svg>
-    </button>
-</div>
-<script src="reader.js" type="module"></script>
+
+<div id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
