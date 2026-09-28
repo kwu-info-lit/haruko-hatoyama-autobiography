@@ -153,4 +153,5 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/vim,linux,macos,emacs,windows
 
-*.otf
+# Built by GitHub Actions (.github/workflows/pages.yml)
+/docs/book.epub

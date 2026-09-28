@@ -63,6 +63,18 @@ bundle exec review-epubmaker config.yml
 
 ---
 
+## Publishing (GitHub Pages)
+
+The EPUB and the web reader in `docs/` are published by GitHub Actions (`.github/workflows/pages.yml`):
+
+* **Push to `main`**: builds `book.epub` with Re:VIEW and deploys it together with `docs/` to GitHub Pages.
+* **Pull requests**: build only; the generated EPUB is attached to the workflow run as the `book-epub` artifact.
+* **Manual run**: available from the Actions tab (`workflow_dispatch`).
+
+`book.epub` is a build output and is not committed. Repository **Settings → Pages → Source** must be set to **GitHub Actions**.
+
+---
+
 ## Running a Coding Agent in Docker Sandboxes
 
 The repository ships a [Docker Sandboxes](https://docs.docker.com/ai/sandboxes/) environment (`sbxenv.yaml`) that runs a coding agent in an isolated sandbox with Ruby and Re:VIEW preinstalled, so the agent can build the EPUB itself. Claude Code, OpenAI Codex and OpenCode (for Grok) are supported; every agent follows the rules in `AGENTS.md`.
@@ -100,6 +112,7 @@ Inside the sandbox, `bundle exec rake epub` works as usual. The Re:VIEW toolchai
 * **`contents/`**: Contains the book's text source files.
   * **`contents/predef/`**: Prefaces, introductions, and front matter.
   * **`contents/chaps/`**: The main chapters of the autobiography (written in Re:VIEW markup format `.re`).
+* **`docs/`**: Browser-based EPUB reader published on GitHub Pages (see `docs/README.md`).
 * **`images/`**: Image assets used in the book (covers, illustrations).
 * **`sty/`**: LaTeX stylesheets and macro files (used for PDF generation).
 * **`lib/tasks/`**: Custom Rake tasks (`review.rake`).
