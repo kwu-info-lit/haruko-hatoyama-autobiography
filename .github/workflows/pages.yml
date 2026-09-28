@@ -1,5 +1,5 @@
-# Re:VIEW で book.epub をビルドし、docs/ のリーダーと合わせて GitHub Pages に公開する。
-# プルリクエストではビルドのみ行い、生成した EPUB を Artifact として添付する。
+# Build book.epub with Re:VIEW and publish it to GitHub Pages together with the reader in docs/.
+# On pull requests, only build and attach the generated EPUB as an artifact.
 name: Build EPUB and deploy Pages
 
 on:
@@ -19,11 +19,11 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.4'
+          ruby-version: '4.0'
           bundler-cache: true
 
-      # style.css が参照するフォントが無くても Re:VIEW はエラーにならず、
-      # フォント抜きの EPUB ができてしまうため、ビルド前に確認する。
+      # Re:VIEW does not fail when fonts referenced by style.css are missing and
+      # silently produces an EPUB without them, so check for them before building.
       - name: Check embedded fonts
         run: |
           for f in fonts/shippori3/ShipporiMincho-OTF-Regular.otf fonts/shippori3/ShipporiMincho-OTF-Bold.otf; do
