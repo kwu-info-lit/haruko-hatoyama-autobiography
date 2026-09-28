@@ -1,5 +1,5 @@
 # Docker Sandboxes mixin kit for building this repository's EPUB with Re:VIEW.
-# Adds Ruby, Bundler and Re:VIEW to an agent sandbox (claude, etc.).
+# Adds Ruby, Bundler and Re:VIEW to an agent sandbox (claude, codex, opencode).
 # See sbxenv.yaml at the repository root for usage.
 schemaVersion: "2"
 kind: mixin
