@@ -21,7 +21,8 @@
     --mark: rgba(214, 160, 20, .38);
 
     --ui-font: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", "Meiryo", sans-serif;
-    --mincho: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", serif;
+    --system-mincho: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", serif;
+    --mincho: "Shippori Mincho", var(--system-mincho);
     --gothic: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", "Yu Gothic", "YuGothic", "Meiryo", sans-serif;
 
     --book-font: var(--mincho);
@@ -174,7 +175,11 @@ button {
     flex-direction: column;
     gap: 14px;
     writing-mode: vertical-rl;
-    font-family: var(--mincho);
+    /* The book's font (Shippori Mincho) is only added partway through loading;
+       using system fonts here keeps the glyphs from swapping mid-load. The
+       fixed line-height keeps the column widths steady as well. */
+    font-family: var(--system-mincho);
+    line-height: 1.5;
     color: var(--ink);
 }
 
