@@ -58,25 +58,8 @@ const loader = {
         this.message(`読み込みに失敗しました。${error?.message ?? ''}`)
         $('#loader-retry').hidden = false
     },
-    // Once loading finishes, the title and author ripple glyph by glyph before
-    // the loader fades out.
     done() {
-        const el = $('#loader')
-        const glyphs = []
-        for (const line of el.querySelectorAll('.loader-title, .loader-author')) {
-            line.replaceChildren(...[...line.textContent].map(char => {
-                const glyph = document.createElement('span')
-                glyph.className = 'loader-glyph'
-                glyph.textContent = char
-                glyph.style.setProperty('--i', glyphs.length)
-                glyphs.push(glyph)
-                return glyph
-            }))
-        }
-        el.classList.add('complete')
-        const finish = () => el.classList.add('done')
-        glyphs.at(-1).addEventListener('animationend', finish, { once: true })
-        setTimeout(finish, 2000)
+        $('#loader').classList.add('done')
     },
 }
 
