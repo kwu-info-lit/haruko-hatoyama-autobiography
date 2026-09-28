@@ -63,6 +63,38 @@ bundle exec review-epubmaker config.yml
 
 ---
 
+## Running a Coding Agent in Docker Sandboxes
+
+The repository ships a [Docker Sandboxes](https://docs.docker.com/ai/sandboxes/) environment (`sbxenv.yaml`) that runs a coding agent in an isolated sandbox with Ruby and Re:VIEW preinstalled, so the agent can build the EPUB itself. Claude Code, OpenAI Codex and OpenCode (for Grok) are supported; every agent follows the rules in `AGENTS.md`.
+
+Requires the `sbx` CLI (`sbx login` first). From the repository root:
+
+```sh
+sbx env plan   # preview what will be created
+sbx env run    # create the sandbox (first time) and attach to Claude Code
+sbx env rm     # remove the sandbox
+```
+
+### Choosing the agent
+
+Claude Code is the default. Select another agent with `--env-arg agent=...`, and pass the same value to `plan`, `run` and `rm`. Each agent gets its own sandbox named `<agent>-haruko-hatoyama`.
+
+| Agent | Command | API key (store once on the host) |
+|---|---|---|
+| Claude Code | `sbx env run` | `sbx secret set anthropic` |
+| OpenAI Codex | `sbx env run --env-arg agent=codex` | `sbx secret set openai` (or `sbx secret set openai --oauth` for a ChatGPT account) |
+| Grok (via OpenCode) | `sbx env run --env-arg agent=opencode` | `sbx secret set xai` |
+
+Grok has no built-in sbx agent, so it runs through [OpenCode](https://opencode.ai/) using the xAI provider. After attaching, pick a Grok model with `/models` in OpenCode.
+
+The secrets are held by the sandbox proxy and never enter the sandbox itself.
+
+### Building inside the sandbox
+
+Inside the sandbox, `bundle exec rake epub` works as usual. The Re:VIEW toolchain is defined as a mixin kit in `sandbox/review/spec.yaml`; when `Gemfile.lock` changes, recreate the sandbox (`sbx env rm` then `sbx env run`, with the same `--env-arg`) so the gems are reinstalled.
+
+---
+
 ## Project Structure
 
 * **`contents/`**: Contains the book's text source files.

@@ -1,0 +1,33 @@
+# Docker Sandboxes (sbx) environment for running a coding agent on this repository.
+#
+# On the host, from the repository root:
+#   sbx env plan   # Preview what will be created (changes nothing)
+#   sbx env run    # Create the sandbox and attach to the agent (re-attaches if it exists)
+#   sbx env rm     # Remove the sandbox
+#
+# The agent defaults to Claude Code. Pick another one with --env-arg, and pass
+# the same value to every `sbx env` command for that sandbox:
+#   sbx env run --env-arg agent=codex      # OpenAI Codex
+#   sbx env run --env-arg agent=opencode   # OpenCode (use this for Grok via xAI)
+#   sbx env rm  --env-arg agent=codex
+# Each agent gets its own sandbox (<agent>-haruko-hatoyama).
+#
+# Ruby and Re:VIEW are available inside the sandbox, so `bundle exec rake epub`
+# builds the EPUB (see the mixin under sandbox/review/).
+# This file is mounted read-only inside the sandbox.
+schemaVersion: "1"
+
+args:
+  agent:
+    default: claude
+    description: Coding agent to run in the sandbox (opencode is the route to Grok)
+    enum: [claude, codex, opencode]
+
+name: ${{ env.args.agent }}-haruko-hatoyama
+
+agent: ${{ env.args.agent }}
+kits:
+  - ./sandbox/review
+
+# Mount this repository read/write.
+workspace: .
