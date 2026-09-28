@@ -1,29 +1,31 @@
-# EPUBリーダー（GitHub Pages）
+# EPUB Reader (GitHub Pages)
 
-`book.epub` をブラウザで縦書きのまま読むための専用リーダーです。外部ライブラリには依存していません。
+A dedicated reader for viewing `book.epub` in the browser with its vertical (tategaki) layout preserved. It has no external library dependencies.
 
-## 構成
+## Structure
 
-| ファイル | 役割 |
+| File | Role |
 | --- | --- |
-| `index.html` | 画面の骨組み（ツールバー・目次・検索・表示設定） |
-| `reader.css` | UIのスタイルと本文の組版（`@layer book` / `@layer reader`） |
-| `reader.js` | アプリ本体（操作・設定・進捗・読書位置の保存） |
-| `lib/zip.js` | ZIP展開（ブラウザ標準の `DecompressionStream` を使用） |
-| `lib/epub.js` | EPUB解析（OPF・目次・スタイルシート・フォント） |
-| `lib/pager.js` | CSS段組によるページ分割と読書位置（アンカー）の管理 |
-| `lib/search.js` | 本文検索（ルビを除いた本文で照合） |
+| `index.html` | Page skeleton (toolbar, table of contents, search, display settings) |
+| `reader.css` | UI styles and body typesetting (`@layer book` / `@layer reader`) |
+| `reader.js` | Main application (controls, settings, progress, saving the reading position) |
+| `lib/zip.js` | ZIP extraction (uses the browser's built-in `DecompressionStream`) |
+| `lib/epub.js` | EPUB parsing (OPF, table of contents, stylesheets, fonts) |
+| `lib/pager.js` | Pagination with CSS multi-column layout and reading-position (anchor) management |
+| `lib/search.js` | Full-text search (matches against the body text with ruby removed) |
 
-## 更新方法
+## Publishing
 
-EPUBを作り直したら、生成された `book.epub` をこのフォルダに上書きコピーするだけで反映されます。
+When changes are pushed to the `main` branch, GitHub Actions (`.github/workflows/pages.yml`) builds `book.epub` with Re:VIEW and publishes it to GitHub Pages together with the contents of this folder. Because `book.epub` is generated at build time, it is not kept in this folder (it is excluded by `.gitignore`).
 
-## ローカルでの確認
+## Previewing Locally
 
 ```sh
+bundle exec rake epub
+cp book.epub docs/
 cd docs
 python3 -m http.server 8000
-# http://localhost:8000/ を開く
+# Open http://localhost:8000/
 ```
 
-`file://` では `fetch` が使えないため、必ずHTTPサーバー経由で開いてください。
+`fetch` does not work over `file://`, so always open the reader through an HTTP server.
