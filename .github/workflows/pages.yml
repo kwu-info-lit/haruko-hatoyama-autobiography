@@ -1,4 +1,4 @@
-# Build book.epub with Re:VIEW and publish it to GitHub Pages together with the reader in docs/.
+# Build book.epub with Re:VIEW and publish it to GitHub Pages together with the reader in public/.
 # On pull requests, only build and attach the generated EPUB as an artifact.
 name: Build EPUB and deploy Pages
 
@@ -36,7 +36,7 @@ jobs:
       - name: Assemble site
         run: |
           mkdir _site
-          cp -R docs/. _site/
+          cp -R public/. _site/
           cp book.epub _site/book.epub
           rm -f _site/README.md
           find _site -name .DS_Store -delete

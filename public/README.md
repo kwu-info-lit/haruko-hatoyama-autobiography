@@ -22,8 +22,8 @@ When changes are pushed to the `main` branch, GitHub Actions (`.github/workflows
 
 ```sh
 bundle exec rake epub
-cp book.epub docs/
-cd docs
+cp book.epub public/
+cd public
 python3 -m http.server 8000
 # Open http://localhost:8000/
 ```
