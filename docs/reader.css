@@ -169,35 +169,6 @@ button {
     visibility: hidden;
 }
 
-#loader.done .loader-mark {
-    transform: translateY(-12px);
-}
-
-#loader .loader-bar,
-#loader #loader-message {
-    transition: opacity .3s var(--ease);
-}
-
-#loader.complete .loader-bar,
-#loader.complete #loader-message {
-    opacity: 0;
-}
-
-.loader-glyph {
-    display: inline-block;
-}
-
-#loader.complete .loader-glyph {
-    animation: loader-glyph .7s var(--ease) calc(var(--i) * 80ms) both;
-}
-
-@keyframes loader-glyph {
-    45% {
-        transform: translateY(-.22em) scale(1.08);
-        color: var(--accent);
-    }
-}
-
 .loader-mark {
     display: flex;
     flex-direction: column;
@@ -205,7 +176,6 @@ button {
     writing-mode: vertical-rl;
     font-family: var(--mincho);
     color: var(--ink);
-    transition: transform .5s var(--ease);
 }
 
 .loader-title {
