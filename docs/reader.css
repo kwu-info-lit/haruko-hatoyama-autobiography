@@ -943,7 +943,7 @@ body:not(.chrome-visible) #bottombar {
         letter-spacing: .06em;
         margin-block: 2.2em 1em;
         padding-inline-start: 3em;
-        color: var(--accent);
+        color: var(--ink);
     }
 
     .epub-body h1:first-child,
