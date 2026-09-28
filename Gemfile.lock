@@ -38,6 +38,7 @@ DEPENDENCIES
 
 CHECKSUMS
   base64 (0.3.0)
+  bundler (4.0.15) sha256=a4ceb882fe94a0e0ac63cd0813932bbfd631a14e5ac0b7975189b19a4d28d9e7
   csv (3.3.5)
   image_size (3.6.0)
   logger (1.7.0)
