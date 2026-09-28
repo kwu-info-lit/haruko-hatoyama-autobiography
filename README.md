@@ -63,6 +63,22 @@ bundle exec review-epubmaker config.yml
 
 ---
 
+## Running Claude Code in Docker Sandboxes
+
+The repository ships a [Docker Sandboxes](https://docs.docker.com/ai/sandboxes/) environment (`sbxenv.yaml`) that runs Claude Code in an isolated sandbox with Ruby and Re:VIEW preinstalled, so the agent can build the EPUB itself.
+
+Requires the `sbx` CLI (`sbx login` first). From the repository root:
+
+```sh
+sbx env plan   # preview what will be created
+sbx env run    # create the sandbox (first time) and attach to Claude Code
+sbx env rm     # remove the sandbox
+```
+
+Inside the sandbox, `bundle exec rake epub` works as usual. The Re:VIEW toolchain is defined as a mixin kit in `sandbox/review/spec.yaml`; when `Gemfile.lock` changes, recreate the sandbox (`sbx env rm` then `sbx env run`) so the gems are reinstalled.
+
+---
+
 ## Project Structure
 
 * **`contents/`**: Contains the book's text source files.

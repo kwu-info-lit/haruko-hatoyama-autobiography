@@ -1,0 +1,19 @@
+# Docker Sandboxes (sbx) environment for running Claude Code on this repository.
+#
+# On the host, from the repository root:
+#   sbx env plan   # Preview what will be created (changes nothing)
+#   sbx env run    # Create the sandbox and attach to Claude Code (re-attaches if it exists)
+#   sbx env rm     # Remove the sandbox
+#
+# Ruby and Re:VIEW are available inside the sandbox, so `bundle exec rake epub`
+# builds the EPUB (see the mixin under sandbox/review/).
+# This file is mounted read-only inside the sandbox.
+schemaVersion: "1"
+name: claude-haruko-hatoyama
+
+agent: claude
+kits:
+  - ./sandbox/review
+
+# Mount this repository read/write.
+workspace: .
