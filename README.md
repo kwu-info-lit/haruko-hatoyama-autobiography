@@ -65,9 +65,9 @@ bundle exec review-epubmaker config.yml
 
 ## Publishing (GitHub Pages)
 
-The EPUB and the web reader in `docs/` are published by GitHub Actions (`.github/workflows/pages.yml`):
+The EPUB and the web reader in `public/` are published by GitHub Actions (`.github/workflows/pages.yml`):
 
-* **Push to `main`**: builds `book.epub` with Re:VIEW and deploys it together with `docs/` to GitHub Pages.
+* **Push to `main`**: builds `book.epub` with Re:VIEW and deploys it together with `public/` to GitHub Pages.
 * **Pull requests**: build only; the generated EPUB is attached to the workflow run as the `book-epub` artifact.
 * **Manual run**: available from the Actions tab (`workflow_dispatch`).
 
@@ -112,7 +112,7 @@ Inside the sandbox, `bundle exec rake epub` works as usual. The Re:VIEW toolchai
 * **`contents/`**: Contains the book's text source files.
   * **`contents/predef/`**: Prefaces, introductions, and front matter.
   * **`contents/chaps/`**: The main chapters of the autobiography (written in Re:VIEW markup format `.re`).
-* **`docs/`**: Browser-based EPUB reader published on GitHub Pages (see `docs/README.md`).
+* **`public/`**: Browser-based EPUB reader published on GitHub Pages (see `public/README.md`).
 * **`images/`**: Image assets used in the book (covers, illustrations).
 * **`sty/`**: LaTeX stylesheets and macro files (used for PDF generation).
 * **`lib/tasks/`**: Custom Rake tasks (`review.rake`).
