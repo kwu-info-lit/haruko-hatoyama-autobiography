@@ -103,7 +103,7 @@ The secrets are held by the sandbox proxy and never enter the sandbox itself.
 
 ### Building inside the sandbox
 
-Inside the sandbox, `bundle exec rake epub` works as usual. The Re:VIEW toolchain is defined as a mixin kit in `sandbox/review/spec.yaml`; when `Gemfile.lock` changes, recreate the sandbox (`sbx env rm` then `sbx env run`, with the same `--env-arg`) so the gems are reinstalled.
+Inside the sandbox, `bundle exec rake epub` works as usual. The Re:VIEW toolchain is defined as a mixin kit in `sbx/review/spec.yaml`; when `Gemfile.lock` changes, recreate the sandbox (`sbx env rm` then `sbx env run`, with the same `--env-arg`) so the gems are reinstalled.
 
 ---
 

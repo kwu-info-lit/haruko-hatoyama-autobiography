@@ -13,7 +13,7 @@
 # Each agent gets its own sandbox (<agent>-haruko-hatoyama).
 #
 # Ruby and Re:VIEW are available inside the sandbox, so `bundle exec rake epub`
-# builds the EPUB (see the mixin under sandbox/review/).
+# builds the EPUB (see the mixin under sbx/review/).
 # This file is mounted read-only inside the sandbox.
 schemaVersion: "1"
 
@@ -27,7 +27,7 @@ name: ${{ env.args.agent }}-haruko-hatoyama
 
 agent: ${{ env.args.agent }}
 kits:
-  - ./sandbox/review
+  - ./sbx/review
 
 # Mount this repository read/write.
 workspace: .
